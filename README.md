@@ -83,3 +83,7 @@ npm run preview
 - [`ABOUT.md`](./ABOUT.md): Comprehensive architectural decisions, feature reasons, API details, and future roadmap.
 - [`about-folders.md`](./about-folders.md): Directory and file structure breakdown explaining the single responsibility of every file.
 - [`GITHUB_PAGES_DEPLOY.md`](./GITHUB_PAGES_DEPLOY.md): Step-by-step GitHub Pages automated deployment instructions, repository secrets setup, and troubleshooting guide.
+ 
+
+
+visit site = https://about-mayukh.github.io/travel-info-mayukh/
