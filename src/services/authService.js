@@ -3,6 +3,18 @@ import { supabase, isSupabaseConfigured } from '../lib/supabase';
 // Local storage key for fallback demo session
 const LOCAL_AUTH_KEY = 'wanderspot_demo_session';
 
+// Recognized administrator emails
+const ADMIN_EMAILS = [
+  'suryadey5507@gmail.com',
+  'mayukhdey9920.apple@gmail.com',
+];
+
+export function isEmailAdmin(email, role) {
+  if (role === 'admin') return true;
+  if (!email) return false;
+  return ADMIN_EMAILS.includes(email.toLowerCase().trim());
+}
+
 /**
  * Helper to get demo session from localStorage
  */
@@ -45,13 +57,13 @@ export async function signUp({ email, password, fullName }) {
   }
 
   // Fallback demo mode
-  const isDemoAdmin = email.toLowerCase().includes('admin');
+  const isDemoAdmin = isEmailAdmin(email);
   const demoUser = {
-    id: 'demo-user-' + Math.random().toString(36).substring(2, 9),
+    id: isDemoAdmin ? 'demo-admin-id' : ('demo-user-' + Math.random().toString(36).substring(2, 9)),
     email,
-    user_metadata: { full_name: fullName || email.split('@')[0] },
+    user_metadata: { full_name: isDemoAdmin ? 'Surya Dey (Admin)' : (fullName || email.split('@')[0]) },
     profile: {
-      full_name: fullName || email.split('@')[0],
+      full_name: isDemoAdmin ? 'Surya Dey (Admin)' : (fullName || email.split('@')[0]),
       role: isDemoAdmin ? 'admin' : 'user',
     },
   };
@@ -77,7 +89,7 @@ export async function signIn({ email, password }) {
       .eq('id', data.user.id)
       .maybeSingle();
 
-    const isAdminEmail = data.user.email?.toLowerCase() === 'mayukhdey9920.apple@gmail.com' || profile?.role === 'admin';
+    const isAdminEmail = isEmailAdmin(data.user.email, profile?.role);
     const resolvedProfile = profile || {
       id: data.user.id,
       full_name: data.user.user_metadata?.full_name || data.user.email?.split('@')[0],
@@ -96,13 +108,13 @@ export async function signIn({ email, password }) {
   }
 
   // Fallback demo mode
-  const isDemoAdmin = email.toLowerCase().includes('admin');
+  const isDemoAdmin = isEmailAdmin(email);
   const demoUser = {
     id: isDemoAdmin ? 'demo-admin-id' : 'demo-user-id',
     email,
-    user_metadata: { full_name: isDemoAdmin ? 'Admin WanderSpot' : email.split('@')[0] },
+    user_metadata: { full_name: isDemoAdmin ? 'Surya Dey (Admin)' : email.split('@')[0] },
     profile: {
-      full_name: isDemoAdmin ? 'Admin WanderSpot' : email.split('@')[0],
+      full_name: isDemoAdmin ? 'Surya Dey (Admin)' : email.split('@')[0],
       role: isDemoAdmin ? 'admin' : 'user',
     },
   };
@@ -151,7 +163,7 @@ export async function getCurrentUser() {
       .eq('id', user.id)
       .maybeSingle();
 
-    const isAdminEmail = user.email?.toLowerCase() === 'mayukhdey9920.apple@gmail.com' || profile?.role === 'admin';
+    const isAdminEmail = isEmailAdmin(user.email, profile?.role);
     const resolvedProfile = profile || {
       id: user.id,
       full_name: user.user_metadata?.full_name || user.email?.split('@')[0],
