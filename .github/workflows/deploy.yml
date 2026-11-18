@@ -23,9 +23,9 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_BASE: /${{ github.event.repository.name }}/
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_BASE: /travel-info-mayukh/
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://frkbhfszgxbgyfbctuln.supabase.co' }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZya2JoZnN6Z3hiZ3lmYmN0dWxuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUwMDczMDQsImV4cCI6MjExMDU4MzMwNH0.KH9FLkiM_TjQMY_4Gv25QQdzcEWa_-NSr4TqxQ7ZZXY' }}
           VITE_UNSPLASH_ACCESS_KEY: ${{ secrets.VITE_UNSPLASH_ACCESS_KEY }}
       - name: Add SPA fallback
         run: cp dist/index.html dist/404.html
