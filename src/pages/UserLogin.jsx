@@ -48,7 +48,14 @@ export function UserLogin() {
       }
       navigate(from, { replace: true });
     } catch (err) {
-      setFormError(err.message || (isSignUp ? 'Registration failed.' : 'Invalid email or password.'));
+      const msg = err.message || '';
+      if (msg.toLowerCase().includes('rate limit')) {
+        setFormError(
+          "Supabase email rate limit reached (max 3 confirmation emails/hour on free tier). In Supabase Dashboard → Authentication → Providers → Email, toggle OFF 'Confirm email' to enable instant unlimited signups."
+        );
+      } else {
+        setFormError(err.message || (isSignUp ? 'Registration failed.' : 'Invalid email or password.'));
+      }
     } finally {
       setLoading(false);
     }
